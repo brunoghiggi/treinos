@@ -11,6 +11,8 @@
             padding: 20px;
             background-color: #f4f4f4;
             color: #333;
+            /* Adicionado padding-bottom para evitar que o conteúdo fique atrás da barra de progresso fixa */
+            padding-bottom: 100px; /* Ajuste conforme a altura da barra de progresso */
         }
 
         h1 {
@@ -62,6 +64,7 @@
             background-color: #fff;
             border-radius: 12px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative; /* Necessário para z-index da barra de progresso */
         }
 
         .treino-detail-view h2 {
@@ -134,7 +137,7 @@
             padding-top: 8px; /* Reduced padding */
             border-top: 1px solid #ddd;
             width: 100%;
-            justify-content: flex-end; /* Alinha o checkbox principal à direita */
+            justify-content: flex-end; /* ALINHA SEMPRE À DIREITA */
         }
 
         .checkbox-container.main-exercise-checkbox input[type="checkbox"] {
@@ -150,10 +153,19 @@
 
         /* Progress Bar Styles */
         .progress-bar-container {
-            margin-top: 20px; /* Reduced margin */
-            padding-top: 15px; /* Reduced padding */
-            border-top: 2px solid #b2ebf2;
+            /* Removido margin-top e padding-top para que não apareça no layout normal */
+            border-top: none; /* Remove a borda superior quando fixo */
             text-align: center;
+
+            position: fixed; /* Fixa a barra na tela */
+            bottom: 0; /* Alinha na parte inferior */
+            left: 0; /* Alinha à esquerda */
+            width: 100%; /* Ocupa toda a largura */
+            background-color: #f8f8f8; /* Fundo para a barra fixa */
+            padding: 15px 20px; /* Padding interno */
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); /* Sombra para destacá-lo */
+            z-index: 998; /* Garante que fique acima do conteúdo, mas abaixo dos popups */
+            box-sizing: border-box; /* Inclui padding e border no width/height */
         }
 
         .progress-bar {
@@ -203,6 +215,7 @@
             text-align: center;
             max-width: 90%;
             width: 400px;
+            transform: scale(0.9);
             animation: popin 0.3s forwards;
             position: relative;
         }
@@ -316,6 +329,7 @@
         @media (max-width: 480px) {
             body {
                 padding: 10px;
+                padding-bottom: 100px; /* Ajustado para mobile também */
             }
 
             h1 {
@@ -345,7 +359,7 @@
             /* Image dropdown is removed */
 
             .checkbox-container.main-exercise-checkbox {
-                justify-content: flex-start;
+                justify-content: flex-start; /* Mantém alinhamento à esquerda em telas menores para melhor UX */
                 margin-top: 8px;
                 padding-top: 5px;
             }
@@ -357,7 +371,7 @@
             }
 
             .progress-bar-container {
-                margin-top: 15px;
+                margin-top: 0; /* Removido margin-top para fixar no rodapé */
                 padding-top: 10px;
             }
             .progress-text {
@@ -1056,25 +1070,27 @@
                     }
 
                     // Event listener to open exercise detail popup
-                    // Attach to a specific part of the exercise, e.g., exercicio-header, to avoid checkbox conflict
-                    const exerciseHeader = exercise.querySelector('.exercicio-header');
-                    if (exerciseHeader) {
-                         exerciseHeader.addEventListener('click', (event) => {
-                            // Populate popup with exercise details from data attributes
-                            popupExerciseName.textContent = exercise.dataset.exerciseName;
-                            popupExercisePeso.textContent = exercise.dataset.exercisePeso;
-                            popupExerciseSeriesReps.textContent = exercise.dataset.exerciseSeriesReps;
-                            popupExerciseDica.textContent = exercise.dataset.exerciseDica;
-                            popupExerciseImage.src = exercise.dataset.exerciseImage;
+                    // Attach to the entire exercise div but exclude clicks on the checkbox itself
+                    exercise.addEventListener('click', (event) => {
+                        // Check if the clicked element or its parent is the checkbox container
+                        if (event.target.closest('.main-exercise-checkbox')) {
+                            return; // Do nothing if checkbox or its label was clicked
+                        }
 
-                            exerciseDetailPopup.style.display = 'flex'; // Show exercise detail popup
-                        });
-                    }
+                        // Populate popup with exercise details from data attributes
+                        popupExerciseName.textContent = exercise.dataset.exerciseName;
+                        popupExercisePeso.textContent = exercise.dataset.exercisePeso;
+                        popupExerciseSeriesReps.textContent = exercise.dataset.exerciseSeriesReps;
+                        popupExerciseDica.textContent = exercise.dataset.exerciseDica;
+                        popupExerciseImage.src = exercise.dataset.exerciseImage;
+
+                        exerciseDetailPopup.style.display = 'flex'; // Show exercise detail popup
+                    });
                 });
             });
 
             // Close exercise detail popup event listener
-            exercisePopupCloseButton.addEventListener('click', () => { // Fixed the nested arrow function here
+            exercisePopupCloseButton.addEventListener('click', () => {
                 exerciseDetailPopup.style.display = 'none'; // Hide exercise detail popup
             });
 
