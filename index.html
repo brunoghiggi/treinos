@@ -85,6 +85,12 @@
             flex-direction: column; /* Organiza em coluna em todos os tamanhos */
             padding: 10px 0; /* Menos padding para mais exercícios na tela */
             border-bottom: 1px solid #eee;
+            cursor: pointer; /* Indica que o exercício é clicável */
+            transition: background-color 0.2s ease;
+        }
+
+        .exercicio:hover {
+            background-color: #f0f0f0; /* Feedback visual ao passar o mouse */
         }
 
         .exercicio:last-child {
@@ -118,84 +124,6 @@
             font-size: 13px; /* Slightly smaller font */
             color: #777;
             white-space: nowrap;
-        }
-
-        .exercicio-dica {
-            font-size: 0.8em; /* Smaller font size */
-            color: #888; /* Lighter color */
-            margin-top: 3px; /* Space from above elements */
-            width: 100%; /* Ensure it takes full width */
-            padding-bottom: 8px; /* Space before image dropdown */
-            border-bottom: 1px dashed #eee; /* Separator for tips */
-        }
-
-        /* Image Dropdown Styles */
-        .image-dropdown {
-            margin-top: 10px; /* Reduced margin */
-            width: 100%;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            overflow: hidden; /* Ensures rounded corners are applied to content */
-            background-color: #fcfcfc;
-        }
-
-        .image-dropdown summary {
-            padding: 10px 12px; /* Reduced padding */
-            font-weight: bold;
-            cursor: pointer;
-            list-style: none; /* Remove default marker */
-            background-color: #e0f2f7; /* Light blue background */
-            color: #00796b;
-            border-bottom: 1px solid #d4eff6;
-            transition: background-color 0.3s ease;
-            font-size: 15px; /* Consistent with exercicio-info */
-        }
-
-        .image-dropdown summary:hover {
-            background-color: #c0e6f0;
-        }
-
-        .image-dropdown[open] summary {
-            border-bottom-left-radius: 0;
-            border-bottom-right-radius: 0;
-        }
-
-        .image-dropdown summary::-webkit-details-marker {
-            display: none; /* Hide default arrow in WebKit browsers */
-        }
-        .image-dropdown summary::after {
-            content: '▼'; /* Custom arrow for dropdown */
-            float: right;
-            transition: transform 0.2s;
-        }
-        .image-dropdown[open] summary::after {
-            transform: rotate(180deg);
-        }
-
-        .exercise-image {
-            width: 100%; /* Make image responsive */
-            height: auto;
-            display: block;
-            border-radius: 0 0 8px 8px; /* Rounded bottom corners */
-            object-fit: cover; /* Ensures image covers area without distortion */
-            max-height: 200px; /* Reduced max height */
-        }
-
-        .back-button {
-            background-color: #00796b;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-bottom: 20px;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-            width: fit-content; /* Ajusta ao conteúdo */
-        }
-
-        .back-button:hover {
-            background-color: #004d40;
         }
 
         /* Main Exercise Checkbox */
@@ -252,8 +180,80 @@
             font-size: 15px;
         }
 
-        /* Popup Styles */
-        .popup-overlay {
+        /* Popup Styles (for exercise details) */
+        .exercise-popup-overlay {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            z-index: 999; /* Below workout complete popup */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .exercise-popup-content {
+            background: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 90%;
+            width: 400px;
+            animation: popin 0.3s forwards;
+            position: relative;
+        }
+
+        .exercise-popup-content h3 {
+            color: #00796b;
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.5em;
+        }
+
+        .exercise-popup-content p {
+            font-size: 1em;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .exercise-popup-image {
+            width: 100%;
+            max-height: 250px;
+            object-fit: contain; /* Ensures entire image is visible */
+            border-radius: 8px;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        .exercise-popup-dica {
+            font-size: 0.9em;
+            color: #777;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            border-top: 1px dashed #eee;
+            padding-top: 10px;
+        }
+
+        .exercise-popup-close-button {
+            background-color: #00796b;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+        }
+        .exercise-popup-close-button:hover {
+            background-color: #004d40;
+        }
+
+        /* Workout Complete Popup Styles */
+        .workout-complete-popup-overlay { /* Renamed for clarity */
             display: none; /* Hidden by default */
             position: fixed;
             top: 0;
@@ -267,7 +267,7 @@
             align-items: center;
         }
 
-        .popup-content {
+        .workout-complete-popup-content { /* Renamed for clarity */
             background: #fff;
             padding: 30px;
             border-radius: 12px;
@@ -277,27 +277,27 @@
             width: 350px;
             transform: scale(0.9);
             animation: popin 0.3s forwards;
-            position: relative; /* For the close button */
+            position: relative;
         }
 
         @keyframes popin {
             to { transform: scale(1); }
         }
 
-        .popup-content h3 {
+        .workout-complete-popup-content h3 {
             color: #00796b;
             margin-top: 0;
             margin-bottom: 15px;
             font-size: 1.8em;
         }
 
-        .popup-content p {
+        .workout-complete-popup-content p {
             font-size: 1.2em;
             color: #555;
             margin-bottom: 25px;
         }
 
-        .popup-close-button {
+        .workout-complete-popup-close-button {
             background-color: #00796b;
             color: white;
             padding: 10px 20px;
@@ -308,7 +308,7 @@
             transition: background-color 0.3s ease;
         }
 
-        .popup-close-button:hover {
+        .workout-complete-popup-close-button:hover {
             background-color: #004d40;
         }
 
@@ -341,16 +341,8 @@
             .exercicio-peso, .exercicio-series-reps {
                 font-size: 12px;
             }
-            .exercicio-dica {
-                font-size: 0.75em;
-            }
-            .image-dropdown summary {
-                font-size: 14px;
-                padding: 8px 10px;
-            }
-            .exercise-image {
-                max-height: 150px;
-            }
+            /* Dica is now in popup */
+            /* Image dropdown is removed */
 
             .checkbox-container.main-exercise-checkbox {
                 justify-content: flex-start;
@@ -372,16 +364,36 @@
                 font-size: 14px;
             }
 
-            .popup-content {
+            .exercise-popup-content {
                 padding: 20px;
             }
-            .popup-content h3 {
+            .exercise-popup-content h3 {
+                font-size: 1.3em;
+            }
+            .exercise-popup-content p {
+                font-size: 0.9em;
+            }
+            .exercise-popup-image {
+                max-height: 120px;
+            }
+            .exercise-popup-dica {
+                font-size: 0.8em;
+            }
+            .exercise-popup-close-button {
+                padding: 6px 12px;
+                font-size: 0.8em;
+            }
+
+            .workout-complete-popup-content {
+                padding: 20px;
+            }
+            .workout-complete-popup-content h3 {
                 font-size: 1.5em;
             }
-            .popup-content p {
+            .workout-complete-popup-content p {
                 font-size: 1em;
             }
-            .popup-close-button {
+            .workout-complete-popup-close-button {
                 padding: 8px 15px;
                 font-size: 0.9em;
             }
@@ -402,129 +414,129 @@
         <button class="back-button">Voltar</button>
         <h2>💪 Treino A - Peito + Tríceps</h2>
         <div class="timer-display">00:00</div>
-        <div class="exercicio" data-exercise-id="supino_reto">
+        <div class="exercicio" data-exercise-id="supino_reto"
+             data-exercise-name="Supino Reto Máquina"
+             data-exercise-peso="20"
+             data-exercise-series-reps="4x10-12"
+             data-exercise-dica="Mantenha escápulas fixas e controle o movimento."
+             data-exercise-image="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg">
             <div class="exercicio-header">
                 <span class="exercicio-info">Supino Reto Máquina</span>
                 <span class="exercicio-peso">Peso: 20</span>
                 <span class="exercicio-series-reps">Séries x Reps: 4x10-12</span>
             </div>
-            <span class="exercicio-dica">Dica: Mantenha escápulas fixas e controle o movimento.</span>
-            <details class="image-dropdown">
-                <summary>Ver Imagem do Exercício</summary>
-                <img src="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg" alt="Imagem do Exercício" class="exercise-image" onerror="this.onerror=null;this.src='https://placehold.co/780x470/cccccc/000000?text=Imagem+indispon%C3%ADvel';">
-            </details>
             <div class="checkbox-container main-exercise-checkbox">
                 <input type="checkbox" id="supino_reto_done">
                 <label for="supino_reto_done">Feito</label>
             </div>
         </div>
-        <div class="exercicio" data-exercise-id="supino_inclinado">
+        <div class="exercicio" data-exercise-id="supino_inclinado"
+             data-exercise-name="Supino Inclinado Máquina"
+             data-exercise-peso="20"
+             data-exercise-series-reps="4x12"
+             data-exercise-dica="Cotovelos levemente para dentro para proteger o peito."
+             data-exercise-image="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg">
             <div class="exercicio-header">
                 <span class="exercicio-info">Supino Inclinado Máquina</span>
                 <span class="exercicio-peso">Peso: 20</span>
                 <span class="exercicio-series-reps">Séries x Reps: 4x12</span>
             </div>
-            <span class="exercicio-dica">Dica: Cotovelos levemente para dentro para proteger o peito.</span>
-            <details class="image-dropdown">
-                <summary>Ver Imagem do Exercício</summary>
-                <img src="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg" alt="Imagem do Exercício" class="exercise-image" onerror="this.onerror=null;this.src='https://placehold.co/780x470/cccccc/000000?text=Imagem+indispon%C3%ADvel';">
-            </details>
             <div class="checkbox-container main-exercise-checkbox">
                 <input type="checkbox" id="supino_inclinado_done">
                 <label for="supino_inclinado_done">Feito</label>
             </div>
         </div>
-        <div class="exercicio" data-exercise-id="voador">
+        <div class="exercicio" data-exercise-id="voador"
+             data-exercise-name="Voador (Peck Deck)"
+             data-exercise-peso="30"
+             data-exercise-series-reps="4x12"
+             data-exercise-dica="Contraia o peito no fechamento, evite balanço."
+             data-exercise-image="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg">
             <div class="exercicio-header">
                 <span class="exercicio-info">Voador (Peck Deck)</span>
                 <span class="exercicio-peso">Peso: 30</span>
                 <span class="exercicio-series-reps">Séries x Reps: 4x12</span>
             </div>
-            <span class="exercicio-dica">Dica: Contraia o peito no fechamento, evite balanço.</span>
-            <details class="image-dropdown">
-                <summary>Ver Imagem do Exercício</summary>
-                <img src="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg" alt="Imagem do Exercício" class="exercise-image" onerror="this.onerror=null;this.src='https://placehold.co/780x470/cccccc/000000?text=Imagem+indispon%C3%ADvel';">
-            </details>
             <div class="checkbox-container main-exercise-checkbox">
                 <input type="checkbox" id="voador_done">
                 <label for="voador_done">Feito</label>
             </div>
         </div>
-        <div class="exercicio" data-exercise-id="triceps_corda">
+        <div class="exercicio" data-exercise-id="triceps_corda"
+             data-exercise-name="Tríceps Corda"
+             data-exercise-peso="35"
+             data-exercise-series-reps="3x15"
+             data-exercise-dica="Abra a corda no final para ativar a lateral do tríceps."
+             data-exercise-image="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg">
             <div class="exercicio-header">
                 <span class="exercicio-info">Tríceps Corda</span>
                 <span class="exercicio-peso">Peso: 35</span>
                 <span class="exercicio-series-reps">Séries x Reps: 3x15</span>
             </div>
-            <span class="exercicio-dica">Dica: Abra a corda no final para ativar a lateral do tríceps.</span>
-            <details class="image-dropdown">
-                <summary>Ver Imagem do Exercício</summary>
-                <img src="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg" alt="Imagem do Exercício" class="exercise-image" onerror="this.onerror=null;this.src='https://placehold.co/780x470/cccccc/000000?text=Imagem+indispon%C3%ADvel';">
-            </details>
             <div class="checkbox-container main-exercise-checkbox">
                 <input type="checkbox" id="triceps_corda_done">
                 <label for="triceps_corda_done">Feito</label>
             </div>
         </div>
-        <div class="exercicio" data-exercise-id="triceps_barra">
+        <div class="exercicio" data-exercise-id="triceps_barra"
+             data-exercise-name="Tríceps Barra (ou Testa)"
+             data-exercise-peso="28"
+             data-exercise-series-reps="3x12"
+             data-exercise-dica="Evite abrir muito os cotovelos. Movimento controlado."
+             data-exercise-image="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg">
             <div class="exercicio-header">
                 <span class="exercicio-info">Tríceps Barra (ou Testa)</span>
                 <span class="exercicio-peso">Peso: 28</span>
                 <span class="exercicio-series-reps">Séries x Reps: 3x12</span>
             </div>
-            <span class="exercicio-dica">Dica: Evite abrir muito os cotovelos. Movimento controlado.</span>
-            <details class="image-dropdown">
-                <summary>Ver Imagem do Exercício</summary>
-                <img src="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg" alt="Imagem do Exercício" class="exercise-image" onerror="this.onerror=null;this.src='https://placehold.co/780x470/cccccc/000000?text=Imagem+indispon%C3%ADvel';">
-            </details>
             <div class="checkbox-container main-exercise-checkbox">
                 <input type="checkbox" id="triceps_barra_done">
                 <label for="triceps_barra_done">Feito</label>
             </div>
         </div>
-        <div class="exercicio" data-exercise-id="abdominal_obliquo">
+        <div class="exercicio" data-exercise-id="abdominal_obliquo"
+             data-exercise-name="Abdominal Oblíquo"
+             data-exercise-peso="N/A"
+             data-exercise-series-reps="3x20"
+             data-exercise-dica="Foco na contração e controle na volta."
+             data-exercise-image="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg">
             <div class="exercicio-header">
                 <span class="exercicio-info">Abdominal Oblíquo</span>
                 <span class="exercicio-peso">Peso: N/A</span>
                 <span class="exercicio-series-reps">Séries x Reps: 3x20</span>
             </div>
-            <span class="exercicio-dica">Dica: Foco na contração e controle na volta.</span>
-            <details class="image-dropdown">
-                <summary>Ver Imagem do Exercício</summary>
-                <img src="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg" alt="Imagem do Exercício" class="exercise-image" onerror="this.onerror=null;this.src='https://placehold.co/780x470/cccccc/000000?text=Imagem+indispon%C3%ADvel';">
-            </details>
             <div class="checkbox-container main-exercise-checkbox">
                 <input type="checkbox" id="abdominal_obliquo_done">
                 <label for="abdominal_obliquo_done">Feito</label>
             </div>
         </div>
-        <div class="exercicio" data-exercise-id="triceps_unilateral">
+        <div class="exercicio" data-exercise-id="triceps_unilateral"
+             data-exercise-name="Opcional: Triceps Unilateral"
+             data-exercise-peso="N/A"
+             data-exercise-series-reps="3x15"
+             data-exercise-dica="Com halter em cima da cabeça."
+             data-exercise-image="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg">
             <div class="exercicio-header">
                 <span class="exercicio-info">Opcional: Triceps Unilateral</span>
                 <span class="exercicio-peso">Peso: N/A</span>
                 <span class="exercicio-series-reps">Séries x Reps: 3x15</span>
             </div>
-            <span class="exercicio-dica">Dica: Com halter em cima da cabeça.</span>
-            <details class="image-dropdown">
-                <summary>Ver Imagem do Exercício</summary>
-                <img src="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg" alt="Imagem do Exercício" class="exercise-image" onerror="this.onerror=null;this.src='https://placehold.co/780x470/cccccc/000000?text=Imagem+indispon%C3%ADvel';">
-            </details>
             <div class="checkbox-container main-exercise-checkbox">
                 <input type="checkbox" id="triceps_unilateral_done">
                 <label for="triceps_unilateral_done">Feito</label>
             </div>
         </div>
-        <div class="exercicio" data-exercise-id="crucifixo">
+        <div class="exercicio" data-exercise-id="crucifixo"
+             data-exercise-name="Opcional: Crucifixo reto ou inclinado halter"
+             data-exercise-peso="N/A"
+             data-exercise-series-reps="3x15"
+             data-exercise-dica="Não especificada."
+             data-exercise-image="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg">
             <div class="exercicio-header">
                 <span class="exercicio-info">Opcional: Crucifixo reto ou inclinado halter</span>
                 <span class="exercicio-peso">Peso: N/A</span>
                 <span class="exercicio-series-reps">Séries x Reps: 3x15</span>
             </div>
-            <span class="exercicio-dica">Dica: Não especificada.</span>
-            <details class="image-dropdown">
-                <summary>Ver Imagem do Exercício</summary>
-                <img src="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg" alt="Imagem do Exercício" class="exercise-image" onerror="this.onerror=null;this.src='https://placehold.co/780x470/cccccc/000000?text=Imagem+indispon%C3%ADvel';">
-            </details>
             <div class="checkbox-container main-exercise-checkbox">
                 <input type="checkbox" id="crucifixo_done">
                 <label for="crucifixo_done">Feito</label>
@@ -543,113 +555,113 @@
         <button class="back-button">Voltar</button>
         <h2>🏋️‍♂️ Treino B - Costas + Bíceps</h2>
         <div class="timer-display">00:00</div>
-        <div class="exercicio" data-exercise-id="puxada_alta">
+        <div class="exercicio" data-exercise-id="puxada_alta"
+             data-exercise-name="Puxada Alta (frente)"
+             data-exercise-peso="9"
+             data-exercise-series-reps="4x12"
+             data-exercise-dica="Não jogue o corpo para trás. Desça até o queixo."
+             data-exercise-image="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg">
             <div class="exercicio-header">
                 <span class="exercicio-info">Puxada Alta (frente)</span>
                 <span class="exercicio-peso">Peso: 9</span>
                 <span class="exercicio-series-reps">Séries x Reps: 4x12</span>
             </div>
-            <span class="exercicio-dica">Dica: Não jogue o corpo para trás. Desça até o queixo.</span>
-            <details class="image-dropdown">
-                <summary>Ver Imagem do Exercício</summary>
-                <img src="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg" alt="Imagem do Exercício" class="exercise-image" onerror="this.onerror=null;this.src='https://placehold.co/780x470/cccccc/000000?text=Imagem+indispon%C3%ADvel';">
-            </details>
             <div class="checkbox-container main-exercise-checkbox">
                 <input type="checkbox" id="puxada_alta_done">
                 <label for="puxada_alta_done">Feito</label>
             </div>
         </div>
-        <div class="exercicio" data-exercise-id="remada_baixa">
+        <div class="exercicio" data-exercise-id="remada_baixa"
+             data-exercise-name="Remada Baixa Triângulo"
+             data-exercise-peso="7"
+             data-exercise-series-reps="4x12"
+             data-exercise-dica="Contraia as escápulas no final da puxada."
+             data-exercise-image="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg">
             <div class="exercicio-header">
                 <span class="exercicio-info">Remada Baixa Triângulo</span>
                 <span class="exercicio-peso">Peso: 7</span>
                 <span class="exercicio-series-reps">Séries x Reps: 4x12</span>
             </div>
-            <span class="exercicio-dica">Dica: Contraia as escápulas no final da puxada.</span>
-            <details class="image-dropdown">
-                <summary>Ver Imagem do Exercício</summary>
-                <img src="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg" alt="Imagem do Exercício" class="exercise-image" onerror="this.onerror=null;this.src='https://placehold.co/780x470/cccccc/000000?text=Imagem+indispon%C3%ADvel';">
-            </details>
             <div class="checkbox-container main-exercise-checkbox">
                 <input type="checkbox" id="remada_baixa_done">
                 <label for="remada_baixa_done">Feito</label>
             </div>
         </div>
-        <div class="exercicio" data-exercise-id="puxada_articulada">
+        <div class="exercicio" data-exercise-id="puxada_articulada"
+             data-exercise-name="Puxada Alta Articulada"
+             data-exercise-peso="20"
+             data-exercise-series-reps="4x12"
+             data-exercise-dica="Não especificada."
+             data-exercise-image="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg">
             <div class="exercicio-header">
                 <span class="exercicio-info">Puxada Alta Articulada</span>
                 <span class="exercicio-peso">Peso: 20</span>
                 <span class="exercicio-series-reps">Séries x Reps: 4x12</span>
             </div>
-            <span class="exercicio-dica">Dica: Não especificada.</span>
-            <details class="image-dropdown">
-                <summary>Ver Imagem do Exercício</summary>
-                <img src="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg" alt="Imagem do Exercício" class="exercise-image" onerror="this.onerror=null;this.src='https://placehold.co/780x470/cccccc/000000?text=Imagem+indispon%C3%ADvel';">
-            </details>
             <div class="checkbox-container main-exercise-checkbox">
                 <input type="checkbox" id="puxada_articulada_done">
                 <label for="puxada_articulada_done">Feito</label>
             </div>
         </div>
-        <div class="exercicio" data-exercise-id="remada_articulada">
+        <div class="exercicio" data-exercise-id="remada_articulada"
+             data-exercise-name="Remada Articulada"
+             data-exercise-peso="15-20"
+             data-exercise-series-reps="4x12"
+             data-exercise-dica="Cotovelos alinhados ao tronco. Segure um segundo."
+             data-exercise-image="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg">
             <div class="exercicio-header">
                 <span class="exercicio-info">Remada Articulada</span>
                 <span class="exercicio-peso">Peso: 15-20</span>
                 <span class="exercicio-series-reps">Séries x Reps: 4x12</span>
             </div>
-            <span class="exercicio-dica">Dica: Cotovelos alinhados ao tronco. Segure um segundo.</span>
-            <details class="image-dropdown">
-                <summary>Ver Imagem do Exercício</summary>
-                <img src="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg" alt="Imagem do Exercício" class="exercise-image" onerror="this.onerror=null;this.src='https://placehold.co/780x470/cccccc/000000?text=Imagem+indispon%C3%ADvel';">
-            </details>
             <div class="checkbox-container main-exercise-checkbox">
                 <input type="checkbox" id="remada_articulada_done">
                 <label for="remada_articulada_done">Feito</label>
             </div>
         </div>
-        <div class="exercicio" data-exercise-id="rosca_martelo">
+        <div class="exercicio" data-exercise-id="rosca_martelo"
+             data-exercise-name="Rosca Martelo com Corda"
+             data-exercise-peso="30-35"
+             data-exercise-series-reps="3x12"
+             data-exercise-dica="Cotovelos fixos. Não balance o corpo."
+             data-exercise-image="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg">
             <div class="exercicio-header">
                 <span class="exercicio-info">Rosca Martelo com Corda</span>
                 <span class="exercicio-peso">Peso: 30-35</span>
                 <span class="exercicio-series-reps">Séries x Reps: 3x12</span>
             </div>
-            <span class="exercicio-dica">Dica: Cotovelos fixos. Não balance o corpo.</span>
-            <details class="image-dropdown">
-                <summary>Ver Imagem do Exercício</summary>
-                <img src="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg" alt="Imagem do Exercício" class="exercise-image" onerror="this.onerror=null;this.src='https://placehold.co/780x470/cccccc/000000?text=Imagem+indispon%C3%ADvel';">
-            </details>
             <div class="checkbox-container main-exercise-checkbox">
                 <input type="checkbox" id="rosca_martelo_done">
                 <label for="rosca_martelo_done">Feito</label>
             </div>
         </div>
-        <div class="exercicio" data-exercise-id="rosca_scott">
+        <div class="exercicio" data-exercise-id="rosca_scott"
+             data-exercise-name="Rosca Scott Máquina"
+             data-exercise-peso="25"
+             data-exercise-series-reps="3x12"
+             data-exercise-dica="Movimento controlado, sem estender totalmente."
+             data-exercise-image="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg">
             <div class="exercicio-header">
                 <span class="exercicio-info">Rosca Scott Máquina</span>
                 <span class="exercicio-peso">Peso: 25</span>
                 <span class="exercicio-series-reps">Séries x Reps: 3x12</span>
             </div>
-            <span class="exercicio-dica">Dica: Movimento controlado, sem estender totalmente.</span>
-            <details class="image-dropdown">
-                <summary>Ver Imagem do Exercício</summary>
-                <img src="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg" alt="Imagem do Exercício" class="exercise-image" onerror="this.onerror=null;this.src='https://placehold.co/780x470/cccccc/000000?text=Imagem+indispon%C3%ADvel';">
-            </details>
             <div class="checkbox-container main-exercise-checkbox">
                 <input type="checkbox" id="rosca_scott_done">
                 <label for="rosca_scott_done">Feito</label>
             </div>
         </div>
-        <div class="exercicio" data-exercise-id="abdominal_supra">
+        <div class="exercicio" data-exercise-id="abdominal_supra"
+             data-exercise-name="Abdominal Supra"
+             data-exercise-peso="N/A"
+             data-exercise-series-reps="3x20"
+             data-exercise-dica="Mantenha o queixo afastado do peito. Foco no abdômen."
+             data-exercise-image="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg">
             <div class="exercicio-header">
                 <span class="exercicio-info">Abdominal Supra</span>
                 <span class="exercicio-peso">Peso: N/A</span>
                 <span class="exercicio-series-reps">Séries x Reps: 3x20</span>
             </div>
-            <span class="exercicio-dica">Dica: Mantenha o queixo afastado do peito. Foco no abdômen.</span>
-            <details class="image-dropdown">
-                <summary>Ver Imagem do Exercício</summary>
-                <img src="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg" alt="Imagem do Exercício" class="exercise-image" onerror="this.onerror=null;this.src='https://placehold.co/780x470/cccccc/000000?text=Imagem+indispon%C3%ADvel';">
-            </details>
             <div class="checkbox-container main-exercise-checkbox">
                 <input type="checkbox" id="abdominal_supra_done">
                 <label for="abdominal_supra_done">Feito</label>
@@ -668,81 +680,81 @@
         <button class="back-button">Voltar</button>
         <h2>🧱 Treino C - Ombros + Core</h2>
         <div class="timer-display">00:00</div>
-        <div class="exercicio" data-exercise-id="elevacao_lateral">
+        <div class="exercicio" data-exercise-id="elevacao_lateral"
+             data-exercise-name="Elevação Lateral com Halteres"
+             data-exercise-peso="N/A"
+             data-exercise-series-reps="4x12"
+             data-exercise-dica="Braços levemente dobrados, suba até a linha dos ombros."
+             data-exercise-image="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg">
             <div class="exercicio-header">
                 <span class="exercicio-info">Elevação Lateral com Halteres</span>
                 <span class="exercicio-peso">Peso: N/A</span>
                 <span class="exercicio-series-reps">Séries x Reps: 4x12</span>
             </div>
-            <span class="exercicio-dica">Dica: Braços levemente dobrados, suba até a linha dos ombros.</span>
-            <details class="image-dropdown">
-                <summary>Ver Imagem do Exercício</summary>
-                <img src="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg" alt="Imagem do Exercício" class="exercise-image" onerror="this.onerror=null;this.src='https://placehold.co/780x470/cccccc/000000?text=Imagem+indispon%C3%ADvel';">
-            </details>
             <div class="checkbox-container main-exercise-checkbox">
                 <input type="checkbox" id="elevacao_lateral_done">
                 <label for="elevacao_lateral_done">Feito</label>
             </div>
         </div>
-        <div class="exercicio" data-exercise-id="desenvolvimento_maquina">
+        <div class="exercicio" data-exercise-id="desenvolvimento_maquina"
+             data-exercise-name="Desenvolvimento Máquina"
+             data-exercise-peso="35"
+             data-exercise-series-reps="4x12"
+             data-exercise-dica="Não estenda totalmente os cotovelos no topo."
+             data-exercise-image="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg">
             <div class="exercicio-header">
                 <span class="exercicio-info">Desenvolvimento Máquina</span>
                 <span class="exercicio-peso">Peso: 35</span>
                 <span class="exercicio-series-reps">Séries x Reps: 4x12</span>
             </div>
-            <span class="exercicio-dica">Dica: Não estenda totalmente os cotovelos no topo.</span>
-            <details class="image-dropdown">
-                <summary>Ver Imagem do Exercício</summary>
-                <img src="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg" alt="Imagem do Exercício" class="exercise-image" onerror="this.onerror=null;this.src='https://placehold.co/780x470/cccccc/000000?text=Imagem+indispon%C3%ADvel';">
-            </details>
             <div class="checkbox-container main-exercise-checkbox">
                 <input type="checkbox" id="desenvolvimento_maquina_done">
                 <label for="desenvolvimento_maquina_done">Feito</label>
             </div>
         </div>
-        <div class="exercicio" data-exercise-id="elevacao_frontal">
+        <div class="exercicio" data-exercise-id="elevacao_frontal"
+             data-exercise-name="Elevação Frontal com Corda ou Halteres"
+             data-exercise-peso="6"
+             data-exercise-series-reps="3x12"
+             data-exercise-dica="Suba até a altura dos ombros, sem impulso."
+             data-exercise-image="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg">
             <div class="exercicio-header">
                 <span class="exercicio-info">Elevação Frontal com Corda ou Halteres</span>
                 <span class="exercicio-peso">Peso: 6</span>
                 <span class="exercicio-series-reps">Séries x Reps: 3x12</span>
             </div>
-            <span class="exercicio-dica">Dica: Suba até a altura dos ombros, sem impulso.</span>
-            <details class="image-dropdown">
-                <summary>Ver Imagem do Exercício</summary>
-                <img src="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg" alt="Imagem do Exercício" class="exercise-image" onerror="this.onerror=null;this.src='https://placehold.co/780x470/cccccc/000000?text=Imagem+indispon%C3%ADvel';">
-            </details>
             <div class="checkbox-container main-exercise-checkbox">
                 <input type="checkbox" id="elevacao_frontal_done">
                 <label for="elevacao_frontal_done">Feito</label>
             </div>
         </div>
-        <div class="exercicio" data-exercise-id="encolhimento">
+        <div class="exercicio" data-exercise-id="encolhimento"
+             data-exercise-name="Encolhimento (Shrug) com Halteres"
+             data-exercise-peso="16"
+             data-exercise-series-reps="3x15"
+             data-exercise-dica="Contraia o trapézio no topo, sem girar os ombros."
+             data-exercise-image="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg">
             <div class="exercicio-header">
                 <span class="exercicio-info">Encolhimento (Shrug) com Halteres</span>
                 <span class="exercicio-peso">Peso: 16</span>
                 <span class="exercicio-series-reps">Séries x Reps: 3x15</span>
             </div>
-            <span class="exercicio-dica">Dica: Contraia o trapézio no topo, sem girar os ombros.</span>
-            <details class="image-dropdown">
-                <summary>Ver Imagem do Exercício</summary>
-                <img src="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg" alt="Imagem do Exercício" class="exercise-image" onerror="this.onerror=null;this.src='https://placehold.co/780x470/cccccc/000000?text=Imagem+indispon%C3%ADvel';">
-            </details>
             <div class="checkbox-container main-exercise-checkbox">
                 <input type="checkbox" id="encolhimento_done">
                 <label for="encolhimento_done">Feito</label>
             </div>
         </div>
-        <div class="exercicio" data-exercise-id="abdominal_infra">
+        <div class="exercicio" data-exercise-id="abdominal_infra"
+             data-exercise-name="Abdominal Infra (solo ou barra)"
+             data-exercise-peso="N/A"
+             data-exercise-series-reps="3x20"
+             data-exercise-dica="Use o quadril para levantar, sem embalo."
+             data-exercise-image="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg">
             <div class="exercicio-header">
                 <span class="exercicio-info">Abdominal Infra (solo ou barra)</span>
                 <span class="exercicio-peso">Peso: N/A</span>
                 <span class="exercicio-series-reps">Séries x Reps: 3x20</span>
             </div>
-            <span class="exercicio-dica">Dica: Use o quadril para levantar, sem embalo.</span>
-            <details class="image-dropdown">
-                <summary>Ver Imagem do Exercício</summary>
-                <img src="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg" alt="Imagem do Exercício" class="exercise-image" onerror="this.onerror=null;this.src='https://placehold.co/780x470/cccccc/000000?text=Imagem+indispon%C3%ADvel';">
-            </details>
             <div class="checkbox-container main-exercise-checkbox">
                 <input type="checkbox" id="abdominal_infra_done">
                 <label for="abdominal_infra_done">Feito</label>
@@ -761,113 +773,113 @@
         <button class="back-button">Voltar</button>
         <h2>🦵 Treino D - Pernas + Panturrilha</h2>
         <div class="timer-display">00:00</div>
-        <div class="exercicio" data-exercise-id="agachamento_hack">
+        <div class="exercicio" data-exercise-id="agachamento_hack"
+             data-exercise-name="Agachamento Hack Sentado"
+             data-exercise-peso="35 cada lado"
+             data-exercise-series-reps="4x12"
+             data-exercise-dica="Pés um pouco à frente, desça até 90° no joelho."
+             data-exercise-image="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg">
             <div class="exercicio-header">
                 <span class="exercicio-info">Agachamento Hack Sentado</span>
                 <span class="exercicio-peso">Peso: 35 cada lado</span>
                 <span class="exercicio-series-reps">Séries x Reps: 4x12</span>
             </div>
-            <span class="exercicio-dica">Dica: Pés um pouco à frente, desça até 90° no joelho.</span>
-            <details class="image-dropdown">
-                <summary>Ver Imagem do Exercício</summary>
-                <img src="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg" alt="Imagem do Exercício" class="exercise-image" onerror="this.onerror=null;this.src='https://placehold.co/780x470/cccccc/000000?text=Imagem+indispon%C3%ADvel';">
-            </details>
             <div class="checkbox-container main-exercise-checkbox">
                 <input type="checkbox" id="agachamento_hack_done">
                 <label for="agachamento_hack_done">Feito</label>
             </div>
         </div>
-        <div class="exercicio" data-exercise-id="leg_press">
+        <div class="exercicio" data-exercise-id="leg_press"
+             data-exercise-name="Leg Press Articulado"
+             data-exercise-peso="40+ cada lado"
+             data-exercise-series-reps="4x12"
+             data-exercise-dica="Não trave os joelhos, mantenha abdômen firme."
+             data-exercise-image="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg">
             <div class="exercicio-header">
                 <span class="exercicio-info">Leg Press Articulado</span>
                 <span class="exercicio-peso">Peso: 40+ cada lado</span>
                 <span class="exercicio-series-reps">Séries x Reps: 4x12</span>
             </div>
-            <span class="exercicio-dica">Dica: Não trave os joelhos, mantenha abdômen firme.</span>
-            <details class="image-dropdown">
-                <summary>Ver Imagem do Exercício</summary>
-                <img src="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg" alt="Imagem do Exercício" class="exercise-image" onerror="this.onerror=null;this.src='https://placehold.co/780x470/cccccc/000000?text=Imagem+indispon%C3%ADvel';">
-            </details>
             <div class="checkbox-container main-exercise-checkbox">
                 <input type="checkbox" id="leg_press_done">
                 <label for="leg_press_done">Feito</label>
             </div>
         </div>
-        <div class="exercicio" data-exercise-id="mesa_flexora">
+        <div class="exercicio" data-exercise-id="mesa_flexora"
+             data-exercise-name="Mesa Flexora"
+             data-exercise-peso="15"
+             data-exercise-series-reps="4x12"
+             data-exercise-dica="Segure 1-2 segundos contraindo atrás."
+             data-exercise-image="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg">
             <div class="exercicio-header">
                 <span class="exercicio-info">Mesa Flexora</span>
                 <span class="exercicio-peso">Peso: 15</span>
                 <span class="exercicio-series-reps">Séries x Reps: 4x12</span>
             </div>
-            <span class="exercicio-dica">Dica: Segure 1-2 segundos contraindo atrás.</span>
-            <details class="image-dropdown">
-                <summary>Ver Imagem do Exercício</summary>
-                <img src="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg" alt="Imagem do Exercício" class="exercise-image" onerror="this.onerror=null;this.src='https://placehold.co/780x470/cccccc/000000?text=Imagem+indispon%C3%ADvel';">
-            </details>
             <div class="checkbox-container main-exercise-checkbox">
                 <input type="checkbox" id="mesa_flexora_done">
                 <label for="mesa_flexora_done">Feito</label>
             </div>
         </div>
-        <div class="exercicio" data-exercise-id="cadeira_extensora">
+        <div class="exercicio" data-exercise-id="cadeira_extensora"
+             data-exercise-name="Cadeira Extensora"
+             data-exercise-peso="35"
+             data-exercise-series-reps="4x12"
+             data-exercise-dica="Suba rápido e desça devagar (fase excêntrica)."
+             data-exercise-image="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg">
             <div class="exercicio-header">
                 <span class="exercicio-info">Cadeira Extensora</span>
                 <span class="exercicio-peso">Peso: 35</span>
                 <span class="exercicio-series-reps">Séries x Reps: 4x12</span>
             </div>
-            <span class="exercicio-dica">Dica: Suba rápido e desça devagar (fase excêntrica).</span>
-            <details class="image-dropdown">
-                <summary>Ver Imagem do Exercício</summary>
-                <img src="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg" alt="Imagem do Exercício" class="exercise-image" onerror="this.onerror=null;this.src='https://placehold.co/780x470/cccccc/000000?text=Imagem+indispon%C3%ADvel';">
-            </details>
             <div class="checkbox-container main-exercise-checkbox">
                 <input type="checkbox" id="cadeira_extensora_done">
                 <label for="cadeira_extensora_done">Feito</label>
             </div>
         </div>
-        <div class="exercicio" data-exercise-id="banco_adutor">
+        <div class="exercicio" data-exercise-id="banco_adutor"
+             data-exercise-name="Banco Adutor ou Abdutor (alternar)"
+             data-exercise-peso="40"
+             data-exercise-series-reps="3x15"
+             data-exercise-dica="Concentre-se na contração."
+             data-exercise-image="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg">
             <div class="exercicio-header">
                 <span class="exercicio-info">Banco Adutor ou Abdutor (alternar)</span>
                 <span class="exercicio-peso">Peso: 40</span>
                 <span class="exercicio-series-reps">Séries x Reps: 3x15</span>
             </div>
-            <span class="exercicio-dica">Dica: Concentre-se na contração.</span>
-            <details class="image-dropdown">
-                <summary>Ver Imagem do Exercício</summary>
-                <img src="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg" alt="Imagem do Exercício" class="exercise-image" onerror="this.onerror=null;this.src='https://placehold.co/780x470/cccccc/000000?text=Imagem+indispon%C3%ADvel';">
-            </details>
             <div class="checkbox-container main-exercise-checkbox">
                 <input type="checkbox" id="banco_adutor_done">
                 <label for="banco_adutor_done">Feito</label>
             </div>
         </div>
-        <div class="exercicio" data-exercise-id="panturrilha">
+        <div class="exercicio" data-exercise-id="panturrilha"
+             data-exercise-name="Panturrilha em Pé na Máquina"
+             data-exercise-peso="80"
+             data-exercise-series-reps="4x15-20"
+             data-exercise-dica="Pausa no topo, desça devagar."
+             data-exercise-image="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg">
             <div class="exercicio-header">
                 <span class="exercicio-info">Panturrilha em Pé na Máquina</span>
                 <span class="exercicio-peso">Peso: 80</span>
                 <span class="exercicio-series-reps">Séries x Reps: 4x15-20</span>
             </div>
-            <span class="exercicio-dica">Dica: Pausa no topo, desça devagar.</span>
-            <details class="image-dropdown">
-                <summary>Ver Imagem do Exercício</summary>
-                <img src="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg" alt="Imagem do Exercício" class="exercise-image" onerror="this.onerror=null;this.src='https://placehold.co/780x470/cccccc/000000?text=Imagem+indispon%C3%ADvel';">
-            </details>
             <div class="checkbox-container main-exercise-checkbox">
                 <input type="checkbox" id="panturrilha_done">
                 <label for="panturrilha_done">Feito</label>
             </div>
         </div>
-        <div class="exercicio" data-exercise-id="agachamento_smith">
+        <div class="exercicio" data-exercise-id="agachamento_smith"
+             data-exercise-name="Agachamento Smith (opcional)"
+             data-exercise-peso="N/A"
+             data-exercise-series-reps="4x10"
+             data-exercise-dica="Não especificada."
+             data-exercise-image="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg">
             <div class="exercicio-header">
                 <span class="exercicio-info">Agachamento Smith (opcional)</span>
                 <span class="exercicio-peso">Peso: N/A</span>
                 <span class="exercicio-series-reps">Séries x Reps: 4x10</span>
             </div>
-            <span class="exercicio-dica">Dica: Não especificada.</span>
-            <details class="image-dropdown">
-                <summary>Ver Imagem do Exercício</summary>
-                <img src="https://treinomestre.com.br/wp-content/uploads/2016/10/supino-inclinado-como-fazer-musculos-780x470.jpg" alt="Imagem do Exercício" class="exercise-image" onerror="this.onerror=null;this.src='https://placehold.co/780x470/cccccc/000000?text=Imagem+indispon%C3%ADvel';">
-            </details>
             <div class="checkbox-container main-exercise-checkbox">
                 <input type="checkbox" id="agachamento_smith_done">
                 <label for="agachamento_smith_done">Feito</label>
@@ -881,12 +893,24 @@
         </div>
     </div>
 
+    <!-- Popup for exercise details -->
+    <div id="exerciseDetailPopup" class="exercise-popup-overlay">
+        <div class="exercise-popup-content">
+            <h3 id="popupExerciseName"></h3>
+            <p><strong>Peso:</strong> <span id="popupExercisePeso"></span></p>
+            <p><strong>Séries x Reps:</strong> <span id="popupExerciseSeriesReps"></span></p>
+            <img id="popupExerciseImage" src="" alt="Imagem do Exercício" class="exercise-popup-image" onerror="this.onerror=null;this.src='https://placehold.co/780x470/cccccc/000000?text=Imagem+indispon%C3%ADvel';">
+            <p class="exercise-popup-dica"><strong>Dica de Execução:</strong> <span id="popupExerciseDica"></span></p>
+            <button class="exercise-popup-close-button">Fechar</button>
+        </div>
+    </div>
+
     <!-- Popup for workout completion -->
-    <div id="workoutCompletePopup" class="popup-overlay">
-        <div class="popup-content">
+    <div id="workoutCompletePopup" class="workout-complete-popup-overlay">
+        <div class="workout-complete-popup-content">
             <h3>Treino Concluído!</h3>
             <p>Parabéns! Você completou seu treino em <span id="totalWorkoutTime"></span>.</p>
-            <button class="popup-close-button">Fechar</button>
+            <button class="workout-complete-popup-close-button">Fechar</button>
         </div>
     </div>
 
@@ -896,8 +920,17 @@
             const treinoLinks = document.querySelectorAll('.treino-link');
             const detailViews = document.querySelectorAll('.treino-detail-view');
             const backButtons = document.querySelectorAll('.back-button');
+
+            const exerciseDetailPopup = document.getElementById('exerciseDetailPopup');
+            const popupExerciseName = document.getElementById('popupExerciseName');
+            const popupExercisePeso = document.getElementById('popupExercisePeso');
+            const popupExerciseSeriesReps = document.getElementById('popupExerciseSeriesReps');
+            const popupExerciseDica = document.getElementById('popupExerciseDica');
+            const popupExerciseImage = document.getElementById('popupExerciseImage');
+            const exercisePopupCloseButton = exerciseDetailPopup.querySelector('.exercise-popup-close-button');
+
             const workoutCompletePopup = document.getElementById('workoutCompletePopup');
-            const popupCloseButton = workoutCompletePopup.querySelector('.popup-close-button');
+            const workoutCompletePopupCloseButton = workoutCompletePopup.querySelector('.workout-complete-popup-close-button');
             const totalWorkoutTimeSpan = workoutCompletePopup.querySelector('#totalWorkoutTime');
 
             let currentWorkoutTimer = {
@@ -988,7 +1021,7 @@
                     if (completedExercises === totalExercises && totalExercises > 0) {
                         stopTimer(); // Stop the timer when workout is complete
                         totalWorkoutTimeSpan.textContent = formatTime(currentWorkoutTimer.elapsedTime);
-                        workoutCompletePopup.style.display = 'flex'; // Show the popup
+                        workoutCompletePopup.style.display = 'flex'; // Show the workout completion popup
                     }
                 }
             }
@@ -1021,16 +1054,36 @@
                             updateProgressBar(view);
                         });
                     }
+
+                    // Event listener to open exercise detail popup
+                    // Attach to a specific part of the exercise, e.g., exercicio-header, to avoid checkbox conflict
+                    const exerciseHeader = exercise.querySelector('.exercicio-header');
+                    if (exerciseHeader) {
+                         exerciseHeader.addEventListener('click', (event) => {
+                            // Populate popup with exercise details from data attributes
+                            popupExerciseName.textContent = exercise.dataset.exerciseName;
+                            popupExercisePeso.textContent = exercise.dataset.exercisePeso;
+                            popupExerciseSeriesReps.textContent = exercise.dataset.exerciseSeriesReps;
+                            popupExerciseDica.textContent = exercise.dataset.exerciseDica;
+                            popupExerciseImage.src = exercise.dataset.exerciseImage;
+
+                            exerciseDetailPopup.style.display = 'flex'; // Show exercise detail popup
+                        });
+                    }
                 });
             });
 
-            // Close popup event listener
-            popupCloseButton.addEventListener('click', () => {
-                workoutCompletePopup.style.display = 'none'; // Hide the popup
+            // Close exercise detail popup event listener
+            exercisePopupCloseButton.addEventListener('click', () => { // Fixed the nested arrow function here
+                exerciseDetailPopup.style.display = 'none'; // Hide exercise detail popup
+            });
+
+            // Close workout complete popup event listener
+            workoutCompletePopupCloseButton.addEventListener('click', () => {
+                workoutCompletePopup.style.display = 'none'; // Hide the workout completion popup
             });
 
             // Initialize progress bars on page load for all detail views (in case they become visible later)
-            // This is important for when the page first loads or is refreshed.
             detailViews.forEach(view => {
                 updateProgressBar(view);
             });
