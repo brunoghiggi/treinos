@@ -6,10 +6,11 @@
     <title>Seus Treinos</title>
     <style>
         body {
-            font-family: 'Inter', sans-serif; /* Usando Inter como a fonte padrão */
+            font-family: 'Inter', sans-serif;
             margin: 0;
             padding: 20px;
             background-color: #f4f4f4;
+            color: #333;
         }
 
         h1 {
@@ -18,15 +19,52 @@
             margin-bottom: 30px;
         }
 
-        .treino-container {
-            background-color: #fff;
+        /* Homepage styles */
+        #homepage {
+            display: block; /* Inicialmente visível */
+            max-width: 600px;
+            margin: 0 auto;
             padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 12px; /* Cantos arredondados */
+            background-color: #fff;
+            border-radius: 12px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .treino-container h2 {
+        .treino-link {
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            background-color: #e0f7fa;
+            border: 1px solid #b2ebf2;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            color: #00796b;
+            text-align: center;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .treino-link:hover {
+            background-color: #b2ebf2;
+            transform: translateY(-2px);
+        }
+
+        .treino-link:active {
+            transform: translateY(0);
+        }
+
+        /* Detail view styles */
+        .treino-detail-view {
+            display: none; /* Inicialmente oculto */
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .treino-detail-view h2 {
             color: #555;
             margin-top: 0;
             margin-bottom: 15px;
@@ -36,48 +74,118 @@
 
         .exercicio {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
+            flex-direction: column; /* Organiza em coluna em todos os tamanhos */
+            padding: 15px 0;
             border-bottom: 1px solid #eee;
-            flex-wrap: wrap; /* Permite que os itens quebrem para a próxima linha em telas pequenas */
         }
 
         .exercicio:last-child {
             border-bottom: none;
         }
 
+        .exercicio-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
         .exercicio-info {
             flex-grow: 1;
-            margin-right: 10px;
             font-size: 16px;
             color: #444;
+            margin-right: 10px;
         }
 
         .exercicio-peso {
             font-weight: bold;
             color: #666;
             margin-right: 20px;
-            min-width: 80px; /* Garante que o campo de peso tenha um tamanho mínimo */
+            white-space: nowrap; /* Evita quebra de linha no peso */
         }
 
-        .checkbox-container {
+        .exercicio-series-reps {
+            font-size: 14px;
+            color: #777;
+            white-space: nowrap;
+        }
+
+        .rep-tracker {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .rep-dropdown {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+            width: 100%; /* Ocupa toda a largura disponível */
+            max-width: 150px; /* Limita o tamanho do dropdown */
+            align-self: flex-start; /* Alinha à esquerda */
+        }
+
+        .rep-checkboxes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 5px;
+            padding-top: 10px;
+            border-top: 1px dashed #eee;
+        }
+
+        .rep-checkbox-item {
             display: flex;
             align-items: center;
-            min-width: 80px; /* Garante que o checkbox tenha um tamanho mínimo */
+            white-space: nowrap;
         }
 
-        input[type="checkbox"] {
-            margin-right: 8px;
-            transform: scale(1.2); /* Aumenta o tamanho do checkbox para melhor toque */
+        .rep-checkbox-item input[type="checkbox"] {
+            margin-right: 5px;
+            transform: scale(1.1);
         }
 
-        label {
-            color: #555;
+        .checkbox-container.main-checkbox-container {
+            display: flex;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid #ddd;
+            width: 100%;
+            justify-content: flex-end; /* Alinha o checkbox principal à direita */
+        }
+
+        .checkbox-container.main-checkbox-container input[type="checkbox"] {
+            transform: scale(1.3);
+            margin-right: 10px;
+        }
+
+        .checkbox-container.main-checkbox-container label {
+            font-weight: bold;
+            color: #00796b;
+        }
+
+        .back-button {
+            background-color: #00796b;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
             cursor: pointer;
+            margin-bottom: 20px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            width: fit-content; /* Ajusta ao conteúdo */
         }
 
-        /* Estilos para telas menores (iPhone 16) */
+        .back-button:hover {
+            background-color: #004d40;
+        }
+
+        /* Responsive styles */
         @media (max-width: 480px) {
             body {
                 padding: 10px;
@@ -87,268 +195,622 @@
                 font-size: 24px;
             }
 
-            .treino-container {
+            #homepage, .treino-detail-view {
                 padding: 15px;
             }
 
-            .exercicio {
+            .treino-link {
+                font-size: 16px;
+                padding: 12px 15px;
+            }
+
+            .exercicio-header {
                 flex-direction: column;
                 align-items: flex-start;
-                padding: 10px 0;
             }
 
-            .exercicio-info {
-                margin-bottom: 5px;
-                width: 100%; /* Ocupa toda a largura */
-            }
-
-            .exercicio-peso {
-                margin-bottom: 5px;
+            .exercicio-info, .exercicio-peso, .exercicio-series-reps {
                 margin-right: 0;
-                width: 100%; /* Ocupa toda a largura */
+                margin-bottom: 5px;
+                width: 100%;
             }
 
-            .checkbox-container {
-                margin-top: 5px;
-                width: 100%; /* Ocupa toda a largura */
-                justify-content: flex-end; /* Alinha o checkbox à direita */
+            .rep-dropdown {
+                width: 100%;
+                max-width: none;
+            }
+
+            .checkbox-container.main-checkbox-container {
+                justify-content: flex-start; /* Alinha o checkbox principal à esquerda em telas pequenas */
             }
         }
     </style>
 </head>
 <body>
-    <h1>Seus Treinos</h1>
+    <div id="homepage">
+        <h1>Seus Treinos</h1>
+        <div class="treino-link" data-treino-id="treinoA_details">💪 Treino A - Peito + Tríceps</div>
+        <div class="treino-link" data-treino-id="treinoB_details">🏋️‍♂️ Treino B - Costas + Bíceps</div>
+        <div class="treino-link" data-treino-id="treinoC_details">🧱 Treino C - Ombros + Core</div>
+        <div class="treino-link" data-treino-id="treinoPernas_details">🦵 Treino D - Pernas + Panturrilha</div>
+    </div>
 
-    <div class="treino-container">
+    <!-- Treino A Details -->
+    <div id="treinoA_details" class="treino-detail-view">
+        <button class="back-button">Voltar</button>
         <h2>💪 Treino A - Peito + Tríceps</h2>
-        <div class="exercicio">
-            <span class="exercicio-info">Supino Reto Máquina (4x10-12)</span>
-            <span class="exercicio-peso">Peso: 20</span>
-            <div class="checkbox-container">
-                <input type="checkbox" id="supino_reto">
-                <label for="supino_reto">Feito</label>
+        <div class="exercicio" data-exercise-id="supino_reto">
+            <div class="exercicio-header">
+                <span class="exercicio-info">Supino Reto Máquina</span>
+                <span class="exercicio-peso">Peso: 20</span>
+                <span class="exercicio-series-reps">Séries x Reps: 4x10-12</span>
+            </div>
+            <div class="rep-tracker">
+                <select class="rep-dropdown">
+                    <!-- Options pre-filled by JS -->
+                </select>
+                <div class="rep-checkboxes"></div>
+            </div>
+            <div class="checkbox-container main-checkbox-container">
+                <input type="checkbox" id="supino_reto_done">
+                <label for="supino_reto_done">Exercício Feito</label>
             </div>
         </div>
-        <div class="exercicio">
-            <span class="exercicio-info">Supino Inclinado Máquina (4x12)</span>
-            <span class="exercicio-peso">Peso: 20</span>
-            <div class="checkbox-container">
-                <input type="checkbox" id="supino_inclinado">
-                <label for="supino_inclinado">Feito</label>
+        <div class="exercicio" data-exercise-id="supino_inclinado">
+            <div class="exercicio-header">
+                <span class="exercicio-info">Supino Inclinado Máquina</span>
+                <span class="exercicio-peso">Peso: 20</span>
+                <span class="exercicio-series-reps">Séries x Reps: 4x12</span>
+            </div>
+            <div class="rep-tracker">
+                <select class="rep-dropdown"></select>
+                <div class="rep-checkboxes"></div>
+            </div>
+            <div class="checkbox-container main-checkbox-container">
+                <input type="checkbox" id="supino_inclinado_done">
+                <label for="supino_inclinado_done">Exercício Feito</label>
             </div>
         </div>
-         <div class="exercicio">
-            <span class="exercicio-info">Voador (Peck Deck) (4x12)</span>
-            <span class="exercicio-peso">Peso: 30</span>
-            <div class="checkbox-container">
-                <input type="checkbox" id="voador">
-                <label for="voador">Feito</label>
+        <div class="exercicio" data-exercise-id="voador">
+            <div class="exercicio-header">
+                <span class="exercicio-info">Voador (Peck Deck)</span>
+                <span class="exercicio-peso">Peso: 30</span>
+                <span class="exercicio-series-reps">Séries x Reps: 4x12</span>
+            </div>
+            <div class="rep-tracker">
+                <select class="rep-dropdown"></select>
+                <div class="rep-checkboxes"></div>
+            </div>
+            <div class="checkbox-container main-checkbox-container">
+                <input type="checkbox" id="voador_done">
+                <label for="voador_done">Exercício Feito</label>
             </div>
         </div>
-        <div class="exercicio">
-            <span class="exercicio-info">Tríceps Corda (3x15)</span>
-            <span class="exercicio-peso">Peso: 35</span>
-             <div class="checkbox-container">
-                <input type="checkbox" id="triceps_corda">
-                <label for="triceps_corda">Feito</label>
+        <div class="exercicio" data-exercise-id="triceps_corda">
+            <div class="exercicio-header">
+                <span class="exercicio-info">Tríceps Corda</span>
+                <span class="exercicio-peso">Peso: 35</span>
+                <span class="exercicio-series-reps">Séries x Reps: 3x15</span>
+            </div>
+            <div class="rep-tracker">
+                <select class="rep-dropdown"></select>
+                <div class="rep-checkboxes"></div>
+            </div>
+            <div class="checkbox-container main-checkbox-container">
+                <input type="checkbox" id="triceps_corda_done">
+                <label for="triceps_corda_done">Exercício Feito</label>
             </div>
         </div>
-        <div class="exercicio">
-             <span class="exercicio-info">Tríceps Barra (ou Testa) (3x12)</span>
-             <span class="exercicio-peso">Peso: 28</span>
-             <div class="checkbox-container">
-                <input type="checkbox" id="triceps_barra">
-                <label for="triceps_barra">Feito</label>
+        <div class="exercicio" data-exercise-id="triceps_barra">
+            <div class="exercicio-header">
+                <span class="exercicio-info">Tríceps Barra (ou Testa)</span>
+                <span class="exercicio-peso">Peso: 28</span>
+                <span class="exercicio-series-reps">Séries x Reps: 3x12</span>
+            </div>
+            <div class="rep-tracker">
+                <select class="rep-dropdown"></select>
+                <div class="rep-checkboxes"></div>
+            </div>
+            <div class="checkbox-container main-checkbox-container">
+                <input type="checkbox" id="triceps_barra_done">
+                <label for="triceps_barra_done">Exercício Feito</label>
             </div>
         </div>
-         <div class="exercicio">
-            <span class="exercicio-info">Abdominal Oblíquo (3x20)</span>
-            <span class="exercicio-peso">Peso: N/A</span>
-            <div class="checkbox-container">
-                <input type="checkbox" id="abdominal_obliquo">
-                <label for="abdominal_obliquo">Feito</label>
+        <div class="exercicio" data-exercise-id="abdominal_obliquo">
+            <div class="exercicio-header">
+                <span class="exercicio-info">Abdominal Oblíquo</span>
+                <span class="exercicio-peso">Peso: N/A</span>
+                <span class="exercicio-series-reps">Séries x Reps: 3x20</span>
+            </div>
+            <div class="rep-tracker">
+                <select class="rep-dropdown"></select>
+                <div class="rep-checkboxes"></div>
+            </div>
+            <div class="checkbox-container main-checkbox-container">
+                <input type="checkbox" id="abdominal_obliquo_done">
+                <label for="abdominal_obliquo_done">Exercício Feito</label>
             </div>
         </div>
-         <div class="exercicio">
-            <span class="exercicio-info">Opcional: Triceps Unilateral (3x15)</span>
-            <span class="exercicio-peso">Peso: N/A</span>
-             <div class="checkbox-container">
-                <input type="checkbox" id="triceps_unilateral">
-                <label for="triceps_unilateral">Feito</label>
+        <div class="exercicio" data-exercise-id="triceps_unilateral">
+            <div class="exercicio-header">
+                <span class="exercicio-info">Opcional: Triceps Unilateral</span>
+                <span class="exercicio-peso">Peso: N/A</span>
+                <span class="exercicio-series-reps">Séries x Reps: 3x15</span>
+            </div>
+            <div class="rep-tracker">
+                <select class="rep-dropdown"></select>
+                <div class="rep-checkboxes"></div>
+            </div>
+            <div class="checkbox-container main-checkbox-container">
+                <input type="checkbox" id="triceps_unilateral_done">
+                <label for="triceps_unilateral_done">Exercício Feito</label>
             </div>
         </div>
-         <div class="exercicio">
-            <span class="exercicio-info">Opcional: Crucifixo reto ou inclinado halter (3x15)</span>
-            <span class="exercicio-peso">Peso: N/A</span>
-             <div class="checkbox-container">
-                <input type="checkbox" id="crucifixo">
-                <label for="crucifixo">Feito</label>
+        <div class="exercicio" data-exercise-id="crucifixo">
+            <div class="exercicio-header">
+                <span class="exercicio-info">Opcional: Crucifixo reto ou inclinado halter</span>
+                <span class="exercicio-peso">Peso: N/A</span>
+                <span class="exercicio-series-reps">Séries x Reps: 3x15</span>
+            </div>
+            <div class="rep-tracker">
+                <select class="rep-dropdown"></select>
+                <div class="rep-checkboxes"></div>
+            </div>
+            <div class="checkbox-container main-checkbox-container">
+                <input type="checkbox" id="crucifixo_done">
+                <label for="crucifixo_done">Exercício Feito</label>
             </div>
         </div>
     </div>
 
-    <div class="treino-container">
+    <!-- Treino B Details -->
+    <div id="treinoB_details" class="treino-detail-view">
+        <button class="back-button">Voltar</button>
         <h2>🏋️‍♂️ Treino B - Costas + Bíceps</h2>
-        <div class="exercicio">
-            <span class="exercicio-info">Puxada Alta (frente) (4x12)</span>
-            <span class="exercicio-peso">Peso: 9</span>
-            <div class="checkbox-container">
-                <input type="checkbox" id="puxada_alta">
-                <label for="puxada_alta">Feito</label>
+        <div class="exercicio" data-exercise-id="puxada_alta">
+            <div class="exercicio-header">
+                <span class="exercicio-info">Puxada Alta (frente)</span>
+                <span class="exercicio-peso">Peso: 9</span>
+                <span class="exercicio-series-reps">Séries x Reps: 4x12</span>
+            </div>
+            <div class="rep-tracker">
+                <select class="rep-dropdown"></select>
+                <div class="rep-checkboxes"></div>
+            </div>
+            <div class="checkbox-container main-checkbox-container">
+                <input type="checkbox" id="puxada_alta_done">
+                <label for="puxada_alta_done">Exercício Feito</label>
             </div>
         </div>
-        <div class="exercicio">
-            <span class="exercicio-info">Remada Baixa Triângulo (4x12)</span>
-            <span class="exercicio-peso">Peso: 7</span>
-            <div class="checkbox-container">
-                <input type="checkbox" id="remada_baixa">
-                <label for="remada_baixa">Feito</label>
+        <div class="exercicio" data-exercise-id="remada_baixa">
+            <div class="exercicio-header">
+                <span class="exercicio-info">Remada Baixa Triângulo</span>
+                <span class="exercicio-peso">Peso: 7</span>
+                <span class="exercicio-series-reps">Séries x Reps: 4x12</span>
+            </div>
+            <div class="rep-tracker">
+                <select class="rep-dropdown"></select>
+                <div class="rep-checkboxes"></div>
+            </div>
+            <div class="checkbox-container main-checkbox-container">
+                <input type="checkbox" id="remada_baixa_done">
+                <label for="remada_baixa_done">Exercício Feito</label>
             </div>
         </div>
-         <div class="exercicio">
-            <span class="exercicio-info">Puxada Alta Articulada (4x12)</span>
-            <span class="exercicio-peso">Peso: 20</span>
-            <div class="checkbox-container">
-                <input type="checkbox" id="puxada_articulada">
-                <label for="puxada_articulada">Feito</label>
+        <div class="exercicio" data-exercise-id="puxada_articulada">
+            <div class="exercicio-header">
+                <span class="exercicio-info">Puxada Alta Articulada</span>
+                <span class="exercicio-peso">Peso: 20</span>
+                <span class="exercicio-series-reps">Séries x Reps: 4x12</span>
+            </div>
+            <div class="rep-tracker">
+                <select class="rep-dropdown"></select>
+                <div class="rep-checkboxes"></div>
+            </div>
+            <div class="checkbox-container main-checkbox-container">
+                <input type="checkbox" id="puxada_articulada_done">
+                <label for="puxada_articulada_done">Exercício Feito</label>
             </div>
         </div>
-        <div class="exercicio">
-            <span class="exercicio-info">Remada Articulada (4x12)</span>
-            <span class="exercicio-peso">Peso: 15-20</span>
-             <div class="checkbox-container">
-                <input type="checkbox" id="remada_articulada">
-                <label for="remada_articulada">Feito</label>
+        <div class="exercicio" data-exercise-id="remada_articulada">
+            <div class="exercicio-header">
+                <span class="exercicio-info">Remada Articulada</span>
+                <span class="exercicio-peso">Peso: 15-20</span>
+                <span class="exercicio-series-reps">Séries x Reps: 4x12</span>
+            </div>
+            <div class="rep-tracker">
+                <select class="rep-dropdown"></select>
+                <div class="rep-checkboxes"></div>
+            </div>
+            <div class="checkbox-container main-checkbox-container">
+                <input type="checkbox" id="remada_articulada_done">
+                <label for="remada_articulada_done">Exercício Feito</label>
             </div>
         </div>
-        <div class="exercicio">
-             <span class="exercicio-info">Rosca Martelo com Corda (3x12)</span>
-             <span class="exercicio-peso">Peso: 30-35</span>
-             <div class="checkbox-container">
-                <input type="checkbox" id="rosca_martelo">
-                <label for="rosca_martelo">Feito</label>
+        <div class="exercicio" data-exercise-id="rosca_martelo">
+            <div class="exercicio-header">
+                <span class="exercicio-info">Rosca Martelo com Corda</span>
+                <span class="exercicio-peso">Peso: 30-35</span>
+                <span class="exercicio-series-reps">Séries x Reps: 3x12</span>
+            </div>
+            <div class="rep-tracker">
+                <select class="rep-dropdown"></select>
+                <div class="rep-checkboxes"></div>
+            </div>
+            <div class="checkbox-container main-checkbox-container">
+                <input type="checkbox" id="rosca_martelo_done">
+                <label for="rosca_martelo_done">Exercício Feito</label>
             </div>
         </div>
-         <div class="exercicio">
-            <span class="exercicio-info">Rosca Scott Máquina (3x12)</span>
-            <span class="exercicio-peso">Peso: 25</span>
-            <div class="checkbox-container">
-                <input type="checkbox" id="rosca_scott">
-                <label for="rosca_scott">Feito</label>
+        <div class="exercicio" data-exercise-id="rosca_scott">
+            <div class="exercicio-header">
+                <span class="exercicio-info">Rosca Scott Máquina</span>
+                <span class="exercicio-peso">Peso: 25</span>
+                <span class="exercicio-series-reps">Séries x Reps: 3x12</span>
+            </div>
+            <div class="rep-tracker">
+                <select class="rep-dropdown"></select>
+                <div class="rep-checkboxes"></div>
+            </div>
+            <div class="checkbox-container main-checkbox-container">
+                <input type="checkbox" id="rosca_scott_done">
+                <label for="rosca_scott_done">Exercício Feito</label>
             </div>
         </div>
-         <div class="exercicio">
-            <span class="exercicio-info">Abdominal Supra (3x20)</span>
-            <span class="exercicio-peso">Peso: N/A</span>
-             <div class="checkbox-container">
-                <input type="checkbox" id="abdominal_supra">
-                <label for="abdominal_supra">Feito</label>
+        <div class="exercicio" data-exercise-id="abdominal_supra">
+            <div class="exercicio-header">
+                <span class="exercicio-info">Abdominal Supra</span>
+                <span class="exercicio-peso">Peso: N/A</span>
+                <span class="exercicio-series-reps">Séries x Reps: 3x20</span>
+            </div>
+            <div class="rep-tracker">
+                <select class="rep-dropdown"></select>
+                <div class="rep-checkboxes"></div>
+            </div>
+            <div class="checkbox-container main-checkbox-container">
+                <input type="checkbox" id="abdominal_supra_done">
+                <label for="abdominal_supra_done">Exercício Feito</label>
             </div>
         </div>
     </div>
 
-    <div class="treino-container">
+    <!-- Treino C Details -->
+    <div id="treinoC_details" class="treino-detail-view">
+        <button class="back-button">Voltar</button>
         <h2>🧱 Treino C - Ombros + Core</h2>
-        <div class="exercicio">
-            <span class="exercicio-info">Elevação Lateral com Halteres (4x12)</span>
-            <span class="exercicio-peso">Peso: N/A</span>
-            <div class="checkbox-container">
-                <input type="checkbox" id="elevacao_lateral">
-                <label for="elevacao_lateral">Feito</label>
+        <div class="exercicio" data-exercise-id="elevacao_lateral">
+            <div class="exercicio-header">
+                <span class="exercicio-info">Elevação Lateral com Halteres</span>
+                <span class="exercicio-peso">Peso: N/A</span>
+                <span class="exercicio-series-reps">Séries x Reps: 4x12</span>
+            </div>
+            <div class="rep-tracker">
+                <select class="rep-dropdown"></select>
+                <div class="rep-checkboxes"></div>
+            </div>
+            <div class="checkbox-container main-checkbox-container">
+                <input type="checkbox" id="elevacao_lateral_done">
+                <label for="elevacao_lateral_done">Exercício Feito</label>
             </div>
         </div>
-        <div class="exercicio">
-            <span class="exercicio-info">Desenvolvimento Máquina (4x12)</span>
-            <span class="exercicio-peso">Peso: 35</span>
-            <div class="checkbox-container">
-                <input type="checkbox" id="desenvolvimento_maquina">
-                <label for="desenvolvimento_maquina">Feito</label>
+        <div class="exercicio" data-exercise-id="desenvolvimento_maquina">
+            <div class="exercicio-header">
+                <span class="exercicio-info">Desenvolvimento Máquina</span>
+                <span class="exercicio-peso">Peso: 35</span>
+                <span class="exercicio-series-reps">Séries x Reps: 4x12</span>
+            </div>
+            <div class="rep-tracker">
+                <select class="rep-dropdown"></select>
+                <div class="rep-checkboxes"></div>
+            </div>
+            <div class="checkbox-container main-checkbox-container">
+                <input type="checkbox" id="desenvolvimento_maquina_done">
+                <label for="desenvolvimento_maquina_done">Exercício Feito</label>
             </div>
         </div>
-         <div class="exercicio">
-            <span class="exercicio-info">Elevação Frontal com Corda ou Halteres (3x12)</span>
-            <span class="exercicio-peso">Peso: 6</span>
-            <div class="checkbox-container">
-                <input type="checkbox" id="elevacao_frontal">
-                <label for="elevacao_frontal">Feito</label>
+        <div class="exercicio" data-exercise-id="elevacao_frontal">
+            <div class="exercicio-header">
+                <span class="exercicio-info">Elevação Frontal com Corda ou Halteres</span>
+                <span class="exercicio-peso">Peso: 6</span>
+                <span class="exercicio-series-reps">Séries x Reps: 3x12</span>
+            </div>
+            <div class="rep-tracker">
+                <select class="rep-dropdown"></select>
+                <div class="rep-checkboxes"></div>
+            </div>
+            <div class="checkbox-container main-checkbox-container">
+                <input type="checkbox" id="elevacao_frontal_done">
+                <label for="elevacao_frontal_done">Exercício Feito</label>
             </div>
         </div>
-        <div class="exercicio">
-            <span class="exercicio-info">Encolhimento (Shrug) com Halteres (3x15)</span>
-            <span class="exercicio-peso">Peso: 16</span>
-             <div class="checkbox-container">
-                <input type="checkbox" id="encolhimento">
-                <label for="encolhimento">Feito</label>
+        <div class="exercicio" data-exercise-id="encolhimento">
+            <div class="exercicio-header">
+                <span class="exercicio-info">Encolhimento (Shrug) com Halteres</span>
+                <span class="exercicio-peso">Peso: 16</span>
+                <span class="exercicio-series-reps">Séries x Reps: 3x15</span>
+            </div>
+            <div class="rep-tracker">
+                <select class="rep-dropdown"></select>
+                <div class="rep-checkboxes"></div>
+            </div>
+            <div class="checkbox-container main-checkbox-container">
+                <input type="checkbox" id="encolhimento_done">
+                <label for="encolhimento_done">Exercício Feito</label>
             </div>
         </div>
-        <div class="exercicio">
-             <span class="exercicio-info">Abdominal Infra (solo ou barra) (3x20)</span>
-             <span class="exercicio-peso">Peso: N/A</span>
-             <div class="checkbox-container">
-                <input type="checkbox" id="abdominal_infra">
-                <label for="abdominal_infra">Feito</label>
+        <div class="exercicio" data-exercise-id="abdominal_infra">
+            <div class="exercicio-header">
+                <span class="exercicio-info">Abdominal Infra (solo ou barra)</span>
+                <span class="exercicio-peso">Peso: N/A</span>
+                <span class="exercicio-series-reps">Séries x Reps: 3x20</span>
+            </div>
+            <div class="rep-tracker">
+                <select class="rep-dropdown"></select>
+                <div class="rep-checkboxes"></div>
+            </div>
+            <div class="checkbox-container main-checkbox-container">
+                <input type="checkbox" id="abdominal_infra_done">
+                <label for="abdominal_infra_done">Exercício Feito</label>
             </div>
         </div>
     </div>
 
-     <div class="treino-container">
-        <h2>🦵 Treino A - Pernas + Panturrilha</h2>
-        <div class="exercicio">
-            <span class="exercicio-info">Agachamento Hack Sentado (4x12)</span>
-            <span class="exercicio-peso">Peso: 35 cada lado</span>
-            <div class="checkbox-container">
-                <input type="checkbox" id="agachamento_hack">
-                <label for="agachamento_hack">Feito</label>
+    <!-- Treino Pernas Details (Adjusted to Treino D to avoid confusion with Treino A) -->
+    <div id="treinoPernas_details" class="treino-detail-view">
+        <button class="back-button">Voltar</button>
+        <h2>🦵 Treino D - Pernas + Panturrilha</h2>
+        <div class="exercicio" data-exercise-id="agachamento_hack">
+            <div class="exercicio-header">
+                <span class="exercicio-info">Agachamento Hack Sentado</span>
+                <span class="exercicio-peso">Peso: 35 cada lado</span>
+                <span class="exercicio-series-reps">Séries x Reps: 4x12</span>
+            </div>
+            <div class="rep-tracker">
+                <select class="rep-dropdown"></select>
+                <div class="rep-checkboxes"></div>
+            </div>
+            <div class="checkbox-container main-checkbox-container">
+                <input type="checkbox" id="agachamento_hack_done">
+                <label for="agachamento_hack_done">Exercício Feito</label>
             </div>
         </div>
-        <div class="exercicio">
-            <span class="exercicio-info">Leg Press Articulado (4x12)</span>
-            <span class="exercicio-peso">Peso: 40+ cada lado</span>
-            <div class="checkbox-container">
-                <input type="checkbox" id="leg_press">
-                <label for="leg_press">Feito</label>
+        <div class="exercicio" data-exercise-id="leg_press">
+            <div class="exercicio-header">
+                <span class="exercicio-info">Leg Press Articulado</span>
+                <span class="exercicio-peso">Peso: 40+ cada lado</span>
+                <span class="exercicio-series-reps">Séries x Reps: 4x12</span>
+            </div>
+            <div class="rep-tracker">
+                <select class="rep-dropdown"></select>
+                <div class="rep-checkboxes"></div>
+            </div>
+            <div class="checkbox-container main-checkbox-container">
+                <input type="checkbox" id="leg_press_done">
+                <label for="leg_press_done">Exercício Feito</label>
             </div>
         </div>
-         <div class="exercicio">
-            <span class="exercicio-info">Mesa Flexora (4x12)</span>
-            <span class="exercicio-peso">Peso: 15</span>
-            <div class="checkbox-container">
-                <input type="checkbox" id="mesa_flexora">
-                <label for="mesa_flexora">Feito</label>
+        <div class="exercicio" data-exercise-id="mesa_flexora">
+            <div class="exercicio-header">
+                <span class="exercicio-info">Mesa Flexora</span>
+                <span class="exercicio-peso">Peso: 15</span>
+                <span class="exercicio-series-reps">Séries x Reps: 4x12</span>
+            </div>
+            <div class="rep-tracker">
+                <select class="rep-dropdown"></select>
+                <div class="rep-checkboxes"></div>
+            </div>
+            <div class="checkbox-container main-checkbox-container">
+                <input type="checkbox" id="mesa_flexora_done">
+                <label for="mesa_flexora_done">Exercício Feito</label>
             </div>
         </div>
-        <div class="exercicio">
-            <span class="exercicio-info">Cadeira Extensora (4x12)</span>
-            <span class="exercicio-peso">Peso: 35</span>
-             <div class="checkbox-container">
-                <input type="checkbox" id="cadeira_extensora">
-                <label for="cadeira_extensora">Feito</label>
+        <div class="exercicio" data-exercise-id="cadeira_extensora">
+            <div class="exercicio-header">
+                <span class="exercicio-info">Cadeira Extensora</span>
+                <span class="exercicio-peso">Peso: 35</span>
+                <span class="exercicio-series-reps">Séries x Reps: 4x12</span>
+            </div>
+            <div class="rep-tracker">
+                <select class="rep-dropdown"></select>
+                <div class="rep-checkboxes"></div>
+            </div>
+            <div class="checkbox-container main-checkbox-container">
+                <input type="checkbox" id="cadeira_extensora_done">
+                <label for="cadeira_extensora_done">Exercício Feito</label>
             </div>
         </div>
-        <div class="exercicio">
-             <span class="exercicio-info">Banco Adutor ou Abdutor (alternar) (3x15)</span>
-             <span class="exercicio-peso">Peso: 40</span>
-             <div class="checkbox-container">
-                <input type="checkbox" id="banco_adutor">
-                <label for="banco_adutor">Feito</label>
+        <div class="exercicio" data-exercise-id="banco_adutor">
+            <div class="exercicio-header">
+                <span class="exercicio-info">Banco Adutor ou Abdutor (alternar)</span>
+                <span class="exercicio-peso">Peso: 40</span>
+                <span class="exercicio-series-reps">Séries x Reps: 3x15</span>
+            </div>
+            <div class="rep-tracker">
+                <select class="rep-dropdown"></select>
+                <div class="rep-checkboxes"></div>
+            </div>
+            <div class="checkbox-container main-checkbox-container">
+                <input type="checkbox" id="banco_adutor_done">
+                <label for="banco_adutor_done">Exercício Feito</label>
             </div>
         </div>
-         <div class="exercicio">
-            <span class="exercicio-info">Panturrilha em Pé na Máquina (4x15-20)</span>
-            <span class="exercicio-peso">Peso: 80</span>
-            <div class="checkbox-container">
-                <input type="checkbox" id="panturrilha">
-                <label for="panturrilha">Feito</label>
+        <div class="exercicio" data-exercise-id="panturrilha">
+            <div class="exercicio-header">
+                <span class="exercicio-info">Panturrilha em Pé na Máquina</span>
+                <span class="exercicio-peso">Peso: 80</span>
+                <span class="exercicio-series-reps">Séries x Reps: 4x15-20</span>
+            </div>
+            <div class="rep-tracker">
+                <select class="rep-dropdown"></select>
+                <div class="rep-checkboxes"></div>
+            </div>
+            <div class="checkbox-container main-checkbox-container">
+                <input type="checkbox" id="panturrilha_done">
+                <label for="panturrilha_done">Exercício Feito</label>
             </div>
         </div>
-         <div class="exercicio">
-            <span class="exercicio-info">Agachamento Smith (opcional) (4x10)</span>
-            <span class="exercicio-peso">Peso: N/A</span>
-             <div class="checkbox-container">
-                <input type="checkbox" id="agachamento_smith">
-                <label for="agachamento_smith">Feito</label>
+        <div class="exercicio" data-exercise-id="agachamento_smith">
+            <div class="exercicio-header">
+                <span class="exercicio-info">Agachamento Smith (opcional)</span>
+                <span class="exercicio-peso">Peso: N/A</span>
+                <span class="exercicio-series-reps">Séries x Reps: 4x10</span>
+            </div>
+            <div class="rep-tracker">
+                <select class="rep-dropdown"></select>
+                <div class="rep-checkboxes"></div>
+            </div>
+            <div class="checkbox-container main-checkbox-container">
+                <input type="checkbox" id="agachamento_smith_done">
+                <label for="agachamento_smith_done">Exercício Feito</label>
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const homepage = document.getElementById('homepage');
+            const treinoLinks = document.querySelectorAll('.treino-link');
+            const detailViews = document.querySelectorAll('.treino-detail-view');
+            const backButtons = document.querySelectorAll('.back-button');
+
+            // Function to show a specific view and hide others
+            function showView(viewId) {
+                homepage.style.display = 'none';
+                detailViews.forEach(view => {
+                    view.style.display = 'none';
+                });
+                document.getElementById(viewId).style.display = 'block';
+            }
+
+            // Event listeners for training links on homepage
+            treinoLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    showView(link.dataset.treinoId);
+                });
+            });
+
+            // Event listeners for back buttons
+            backButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    homepage.style.display = 'block';
+                    detailViews.forEach(view => {
+                        view.style.display = 'none';
+                    });
+                });
+            });
+
+            // Function to generate repetition checkboxes
+            function generateRepCheckboxes(exerciseElement, numReps) {
+                const repCheckboxesContainer = exerciseElement.querySelector('.rep-checkboxes');
+                repCheckboxesContainer.innerHTML = ''; // Clear existing checkboxes
+
+                for (let i = 1; i <= numReps; i++) {
+                    const checkboxItem = document.createElement('div');
+                    checkboxItem.classList.add('rep-checkbox-item');
+
+                    const checkboxId = `${exerciseElement.dataset.exerciseId}_rep_${i}`;
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.id = checkboxId;
+                    checkbox.dataset.repIndex = i; // Store rep index for easy reference
+
+                    const label = document.createElement('label');
+                    label.htmlFor = checkboxId;
+                    label.textContent = `Rep ${i}`;
+
+                    checkboxItem.appendChild(checkbox);
+                    checkboxItem.appendChild(label);
+                    repCheckboxesContainer.appendChild(checkboxItem);
+
+                    // Add event listener to individual rep checkboxes
+                    checkbox.addEventListener('change', () => {
+                        updateMainExerciseCheckbox(exerciseElement);
+                    });
+                }
+            }
+
+            // Function to update the main exercise checkbox based on individual reps
+            function updateMainExerciseCheckbox(exerciseElement) {
+                const repCheckboxes = exerciseElement.querySelectorAll('.rep-checkboxes input[type="checkbox"]');
+                const mainExerciseCheckbox = exerciseElement.querySelector('.main-checkbox-container input[type="checkbox"]');
+
+                let allRepsChecked = true;
+                if (repCheckboxes.length === 0) { // If no reps selected, it's not "done"
+                    allRepsChecked = false;
+                } else {
+                    repCheckboxes.forEach(checkbox => {
+                        if (!checkbox.checked) {
+                            allRepsChecked = false;
+                        }
+                    });
+                }
+                mainExerciseCheckbox.checked = allRepsChecked;
+            }
+
+            // Initialize dropdowns and their checkboxes
+            detailViews.forEach(view => {
+                const exercises = view.querySelectorAll('.exercicio');
+                exercises.forEach(exercise => {
+                    const repDropdown = exercise.querySelector('.rep-dropdown');
+                    const seriesRepsText = exercise.querySelector('.exercicio-series-reps').textContent;
+                    let defaultReps = 1; // Default if not parsed
+
+                    // Populate dropdown with options (e.g., 1 to 30 reps)
+                    for (let i = 1; i <= 30; i++) {
+                        const option = document.createElement('option');
+                        option.value = i;
+                        option.textContent = i + ' rep(s)';
+                        repDropdown.appendChild(option);
+                    }
+
+                    // Try to parse default reps from "Séries x Reps" string
+                    const match = seriesRepsText.match(/x(\d+)/);
+                    if (match && match[1]) {
+                        const parsedReps = parseInt(match[1], 10);
+                        if (!isNaN(parsedReps)) {
+                            defaultReps = parsedReps;
+                        }
+                    } else { // Handle ranges like 15-20, take the higher number
+                         const rangeMatch = seriesRepsText.match(/x(\d+)-(\d+)/);
+                         if (rangeMatch && rangeMatch[2]) {
+                            const parsedReps = parseInt(rangeMatch[2], 10);
+                            if (!isNaN(parsedReps)) {
+                                defaultReps = parsedReps;
+                            }
+                         }
+                    }
+
+                    // Set default selected value for dropdown
+                    repDropdown.value = defaultReps;
+                    generateRepCheckboxes(exercise, defaultReps);
+
+                    // Event listener for dropdown change
+                    repDropdown.addEventListener('change', (event) => {
+                        const numReps = parseInt(event.target.value, 10);
+                        generateRepCheckboxes(exercise, numReps);
+                        updateMainExerciseCheckbox(exercise); // Update main checkbox after reps change
+                    });
+
+                    // Add event listener to main exercise checkbox (for manual uncheck)
+                    const mainExerciseCheckbox = exercise.querySelector('.main-checkbox-container input[type="checkbox"]');
+                    mainExerciseCheckbox.addEventListener('change', () => {
+                        // If main checkbox is manually unchecked, uncheck all rep checkboxes
+                        if (!mainExerciseCheckbox.checked) {
+                            const repCheckboxes = exercise.querySelectorAll('.rep-checkboxes input[type="checkbox"]');
+                            repCheckboxes.forEach(checkbox => {
+                                checkbox.checked = false;
+                            });
+                        } else {
+                            // If main checkbox is manually checked, check all rep checkboxes
+                            const repCheckboxes = exercise.querySelectorAll('.rep-checkboxes input[type="checkbox"]');
+                            repCheckboxes.forEach(checkbox => {
+                                checkbox.checked = true;
+                            });
+                        }
+                    });
+                });
+            });
+        });
+    </script>
 </body>
 </html>
