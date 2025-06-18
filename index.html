@@ -11,8 +11,8 @@
             padding: 20px;
             background-color: #f4f4f4;
             color: #333;
-            /* Adicionado padding-bottom para evitar que o conteúdo fique atrás da barra de progresso fixa */
-            padding-bottom: 100px; /* Ajuste conforme a altura da barra de progresso */
+            /* Adicionado padding-bottom para evitar que o conteúdo fique atrás da barra de progresso fixa e do botão de voltar */
+            padding-bottom: 120px; /* Ajuste conforme a altura da barra de progresso e do botão */
         }
 
         h1 {
@@ -151,12 +151,8 @@
             font-size: 15px; /* Consistent with exercicio-info */
         }
 
-        /* Progress Bar Styles */
-        .progress-bar-container {
-            /* Removido margin-top e padding-top para que não apareça no layout normal */
-            border-top: none; /* Remove a borda superior quando fixo */
-            text-align: center;
-
+        /* Progress Bar and Back Button Container (Fixed at bottom) */
+        .fixed-bottom-bar {
             position: fixed; /* Fixa a barra na tela */
             bottom: 0; /* Alinha na parte inferior */
             left: 0; /* Alinha à esquerda */
@@ -166,6 +162,15 @@
             box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); /* Sombra para destacá-lo */
             z-index: 998; /* Garante que fique acima do conteúdo, mas abaixo dos popups */
             box-sizing: border-box; /* Inclui padding e border no width/height */
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centraliza horizontalmente o conteúdo */
+        }
+
+        .progress-bar-inner { /* Contêiner para a barra de progresso real */
+            width: 100%;
+            text-align: center;
+            margin-bottom: 10px; /* Espaço entre a barra e o botão */
         }
 
         .progress-bar {
@@ -190,6 +195,23 @@
             color: #555;
             margin-bottom: 5px;
             font-size: 15px;
+        }
+
+        .back-button {
+            background-color: #00796b;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            width: fit-content; /* Ajusta ao conteúdo */
+            margin-top: 10px; /* Espaço acima do botão */
+        }
+
+        .back-button:hover {
+            background-color: #004d40;
         }
 
         /* Popup Styles (for exercise details) */
@@ -329,7 +351,7 @@
         @media (max-width: 480px) {
             body {
                 padding: 10px;
-                padding-bottom: 100px; /* Ajustado para mobile também */
+                padding-bottom: 120px; /* Ajustado para mobile também */
             }
 
             h1 {
@@ -355,8 +377,6 @@
             .exercicio-peso, .exercicio-series-reps {
                 font-size: 12px;
             }
-            /* Dica is now in popup */
-            /* Image dropdown is removed */
 
             .checkbox-container.main-exercise-checkbox {
                 justify-content: flex-start; /* Mantém alinhamento à esquerda em telas menores para melhor UX */
@@ -370,12 +390,20 @@
                 font-size: 14px;
             }
 
-            .progress-bar-container {
-                margin-top: 0; /* Removido margin-top para fixar no rodapé */
-                padding-top: 10px;
+            .fixed-bottom-bar {
+                padding: 10px; /* Menos padding em telas pequenas */
+            }
+            .progress-bar-inner {
+                margin-bottom: 5px; /* Menos espaço */
             }
             .progress-text {
                 font-size: 14px;
+            }
+
+            .back-button {
+                padding: 8px 12px;
+                font-size: 14px;
+                margin-top: 8px;
             }
 
             .exercise-popup-content {
@@ -425,7 +453,6 @@
 
     <!-- Treino A Details -->
     <div id="treinoA_details" class="treino-detail-view">
-        <button class="back-button">Voltar</button>
         <h2>💪 Treino A - Peito + Tríceps</h2>
         <div class="timer-display">00:00</div>
         <div class="exercicio" data-exercise-id="supino_reto"
@@ -556,17 +583,20 @@
                 <label for="crucifixo_done">Feito</label>
             </div>
         </div>
-        <div class="progress-bar-container">
-            <div class="progress-text">0 de 8 exercícios feitos</div>
-            <div class="progress-bar">
-                <div class="progress-fill"></div>
+        <!-- This div now holds the progress bar and back button, and is made fixed -->
+        <div class="fixed-bottom-bar" id="treinoA_fixed_bar">
+            <div class="progress-bar-inner">
+                <div class="progress-text">0 de 8 exercícios feitos</div>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
             </div>
+            <button class="back-button">Voltar</button>
         </div>
     </div>
 
     <!-- Treino B Details -->
     <div id="treinoB_details" class="treino-detail-view">
-        <button class="back-button">Voltar</button>
         <h2>🏋️‍♂️ Treino B - Costas + Bíceps</h2>
         <div class="timer-display">00:00</div>
         <div class="exercicio" data-exercise-id="puxada_alta"
@@ -681,17 +711,20 @@
                 <label for="abdominal_supra_done">Feito</label>
             </div>
         </div>
-        <div class="progress-bar-container">
-            <div class="progress-text">0 de 7 exercícios feitos</div>
-            <div class="progress-bar">
-                <div class="progress-fill"></div>
+        <!-- This div now holds the progress bar and back button, and is made fixed -->
+        <div class="fixed-bottom-bar" id="treinoB_fixed_bar">
+            <div class="progress-bar-inner">
+                <div class="progress-text">0 de 7 exercícios feitos</div>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
             </div>
+            <button class="back-button">Voltar</button>
         </div>
     </div>
 
     <!-- Treino C Details -->
     <div id="treinoC_details" class="treino-detail-view">
-        <button class="back-button">Voltar</button>
         <h2>🧱 Treino C - Ombros + Core</h2>
         <div class="timer-display">00:00</div>
         <div class="exercicio" data-exercise-id="elevacao_lateral"
@@ -774,17 +807,20 @@
                 <label for="abdominal_infra_done">Feito</label>
             </div>
         </div>
-        <div class="progress-bar-container">
-            <div class="progress-text">0 de 5 exercícios feitos</div>
-            <div class="progress-bar">
-                <div class="progress-fill"></div>
+        <!-- This div now holds the progress bar and back button, and is made fixed -->
+        <div class="fixed-bottom-bar" id="treinoC_fixed_bar">
+            <div class="progress-bar-inner">
+                <div class="progress-text">0 de 5 exercícios feitos</div>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
             </div>
+            <button class="back-button">Voltar</button>
         </div>
     </div>
 
     <!-- Treino Pernas Details (Adjusted to Treino D to avoid confusion with Treino A) -->
     <div id="treinoPernas_details" class="treino-detail-view">
-        <button class="back-button">Voltar</button>
         <h2>🦵 Treino D - Pernas + Panturrilha</h2>
         <div class="timer-display">00:00</div>
         <div class="exercicio" data-exercise-id="agachamento_hack"
@@ -899,11 +935,15 @@
                 <label for="agachamento_smith_done">Feito</label>
             </div>
         </div>
-        <div class="progress-bar-container">
-            <div class="progress-text">0 de 7 exercícios feitos</div>
-            <div class="progress-bar">
-                <div class="progress-fill"></div>
+        <!-- This div now holds the progress bar and back button, and is made fixed -->
+        <div class="fixed-bottom-bar" id="treinoPernas_fixed_bar">
+            <div class="progress-bar-inner">
+                <div class="progress-text">0 de 7 exercícios feitos</div>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
             </div>
+            <button class="back-button">Voltar</button>
         </div>
     </div>
 
@@ -933,6 +973,7 @@
             const homepage = document.getElementById('homepage');
             const treinoLinks = document.querySelectorAll('.treino-link');
             const detailViews = document.querySelectorAll('.treino-detail-view');
+            // Select all back buttons
             const backButtons = document.querySelectorAll('.back-button');
 
             const exerciseDetailPopup = document.getElementById('exerciseDetailPopup');
@@ -995,10 +1036,17 @@
                 homepage.style.display = 'none';
                 detailViews.forEach(view => {
                     view.style.display = 'none';
+                    // Hide fixed bar for other views
+                    const fixedBar = view.querySelector('.fixed-bottom-bar');
+                    if (fixedBar) fixedBar.style.display = 'none';
                     stopTimer(); // Stop timer of previously active view if any
                 });
                 const activeView = document.getElementById(viewId);
                 activeView.style.display = 'block';
+
+                // Show fixed bar for active view
+                const activeFixedBar = activeView.querySelector('.fixed-bottom-bar');
+                if (activeFixedBar) activeFixedBar.style.display = 'flex'; // Changed to flex for column layout
 
                 // Start timer for the newly active view
                 const timerDisplay = activeView.querySelector('.timer-display');
@@ -1047,13 +1095,15 @@
                 });
             });
 
-            // Event listeners for back buttons
+            // Event listeners for back buttons (now inside fixed-bottom-bar)
             backButtons.forEach(button => {
                 button.addEventListener('click', () => {
                     stopTimer(); // Stop timer when going back to homepage
                     homepage.style.display = 'block';
                     detailViews.forEach(view => {
                         view.style.display = 'none';
+                        const fixedBar = view.querySelector('.fixed-bottom-bar');
+                        if (fixedBar) fixedBar.style.display = 'none'; // Ensure fixed bars are hidden
                     });
                 });
             });
